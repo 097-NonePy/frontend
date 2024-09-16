@@ -15,12 +15,12 @@ export const navData = [
   },
   {
     title: 'Chat',
-    path: '/user',
+    path: '/chat',
     icon: icon('ic-chat'),
   },
   {
     title: 'Compare',
-    path: '/products',
+    path: '/compare',
     icon: icon('ic-balance'),
   },
 ];

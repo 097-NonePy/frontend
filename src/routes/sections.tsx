@@ -11,7 +11,7 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 export const HomePage = lazy(() => import('src/pages/home'));
 export const ComparePage = lazy(() => import('src/pages/compare'));
-export const UserPage = lazy(() => import('src/pages/user'));
+export const ChatBotPage = lazy(() => import('src/pages/chatbot'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -41,7 +41,7 @@ export function Router() {
       ),
       children: [
         { element: <HomePage />, index: true },
-        { path: 'chat', element: <UserPage /> },
+        { path: 'chat', element: <ChatBotPage /> },
         { path: 'compare', element: <ComparePage /> },
       ],
     },

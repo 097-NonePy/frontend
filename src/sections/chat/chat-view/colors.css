@@ -1,0 +1,11 @@
+:root {
+  --user-message-bg: #007bff;
+  --bot-message-bg: #f0f0f0;
+  --chat-container-border: #e0e0e0;
+  --chat-bg: #ffffff;
+  --input-bg: #f8f9fa;
+  --send-button-bg: #007bff;
+  --send-button-hover-bg: #296bb1;
+  --user-text-color: #ffffff;
+  --bot-text-color: #000000;
+}

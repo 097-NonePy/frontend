@@ -1,197 +1,129 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Box, TextField, Button, Typography, Paper, CircularProgress } from '@mui/material';
+import { styled } from '@mui/system';
 
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
-import TableBody from '@mui/material/TableBody';
-import Typography from '@mui/material/Typography';
-import TableContainer from '@mui/material/TableContainer';
-import TablePagination from '@mui/material/TablePagination';
-
-import { _users } from 'src/_mock';
-import { DashboardContent } from 'src/layouts/dashboard';
-
-import { Iconify } from 'src/components/iconify';
-import { Scrollbar } from 'src/components/scrollbar';
-
-import { TableNoData } from '../table-no-data';
-import { UserTableRow } from '../user-table-row';
-import { UserTableHead } from '../user-table-head';
-import { TableEmptyRows } from '../table-empty-rows';
-import { UserTableToolbar } from '../user-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
-
-import type { UserProps } from '../user-table-row';
-
-// ----------------------------------------------------------------------
-
-export function UserView() {
-  const table = useTable();
-
-  const [filterName, setFilterName] = useState('');
-
-  const dataFiltered: UserProps[] = applyFilter({
-    inputData: _users,
-    comparator: getComparator(table.order, table.orderBy),
-    filterName,
-  });
-
-  const notFound = !dataFiltered.length && !!filterName;
-
-  return (
-    <DashboardContent>
-      <Box display="flex" alignItems="center" mb={5}>
-        <Typography variant="h4" flexGrow={1}>
-          Users
-        </Typography>
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="mingcute:add-line" />}
-        >
-          New user
-        </Button>
-      </Box>
-
-      <Card>
-        <UserTableToolbar
-          numSelected={table.selected.length}
-          filterName={filterName}
-          onFilterName={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setFilterName(event.target.value);
-            table.onResetPage();
-          }}
-        />
-
-        <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
-            <Table sx={{ minWidth: 800 }}>
-              <UserTableHead
-                order={table.order}
-                orderBy={table.orderBy}
-                rowCount={_users.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    _users.map((user) => user.id)
-                  )
-                }
-                headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
-                  { id: '' },
-                ]}
-              />
-              <TableBody>
-                {dataFiltered
-                  .slice(
-                    table.page * table.rowsPerPage,
-                    table.page * table.rowsPerPage + table.rowsPerPage
-                  )
-                  .map((row) => (
-                    <UserTableRow
-                      key={row.id}
-                      row={row}
-                      selected={table.selected.includes(row.id)}
-                      onSelectRow={() => table.onSelectRow(row.id)}
-                    />
-                  ))}
-
-                <TableEmptyRows
-                  height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
-                />
-
-                {notFound && <TableNoData searchQuery={filterName} />}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
-
-        <TablePagination
-          component="div"
-          page={table.page}
-          count={_users.length}
-          rowsPerPage={table.rowsPerPage}
-          onPageChange={table.onChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={table.onChangeRowsPerPage}
-        />
-      </Card>
-    </DashboardContent>
-  );
+interface MessageBoxProps {
+  align: 'left' | 'right';
 }
 
-// ----------------------------------------------------------------------
+const ChatContainer = styled(Box)({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '80vh',
+  overflowY: 'auto',
+  padding: '16px',
+  border: '1px solid #ccc',
+  borderRadius: '8px',
+});
 
-export function useTable() {
-  const [page, setPage] = useState(0);
-  const [orderBy, setOrderBy] = useState('name');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [selected, setSelected] = useState<string[]>([]);
-  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+const MessageBox = styled(Paper)<MessageBoxProps>(({ theme, align }) => ({
+  padding: '8px 16px',
+  margin: '8px 0',
+  maxWidth: '60%',
+  alignSelf: align === 'right' ? 'flex-end' : 'flex-start',
+  backgroundColor: align === 'right' ? theme.palette.primary.light : theme.palette.grey[200],
+}));
 
-  const onSort = useCallback(
-    (id: string) => {
-      const isAsc = orderBy === id && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(id);
-    },
-    [order, orderBy]
-  );
+const ChatInputContainer = styled(Box)({
+  display: 'flex',
+  marginTop: '16px',
+});
 
-  const onSelectAllRows = useCallback((checked: boolean, newSelecteds: string[]) => {
-    if (checked) {
-      setSelected(newSelecteds);
-      return;
+export function ChatBot() {
+  const [userMessages, setUserMessages] = useState<string[]>([]);
+  const [botReplies, setBotReplies] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSend = async () => {
+    if (inputValue.trim() === '') return;
+
+    setUserMessages([...userMessages, inputValue]);
+    setBotReplies([...botReplies, '......']);
+    setInputValue('');
+    setLoading(true);
+
+    try {
+      const response = await fetchBotReply(inputValue);
+
+      setBotReplies((prevReplies) => {
+        const newReplies = [...prevReplies];
+        newReplies[newReplies.length - 1] = response.status
+          ? "I'm sorry, I couldn't process your request at the moment."
+          : response.answer;
+        return newReplies;
+      });
+    } catch (error) {
+      console.error('Error in handleSend:', error);
+      setBotReplies((prevReplies) => {
+        const newReplies = [...prevReplies];
+        newReplies[newReplies.length - 1] =
+          "I'm sorry, an error occurred while processing your request.";
+        return newReplies;
+      });
+    } finally {
+      setLoading(false);
     }
-    setSelected([]);
-  }, []);
-
-  const onSelectRow = useCallback(
-    (inputValue: string) => {
-      const newSelected = selected.includes(inputValue)
-        ? selected.filter((value) => value !== inputValue)
-        : [...selected, inputValue];
-
-      setSelected(newSelected);
-    },
-    [selected]
-  );
-
-  const onResetPage = useCallback(() => {
-    setPage(0);
-  }, []);
-
-  const onChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage);
-  }, []);
-
-  const onChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
-      onResetPage();
-    },
-    [onResetPage]
-  );
-
-  return {
-    page,
-    order,
-    onSort,
-    orderBy,
-    selected,
-    rowsPerPage,
-    onSelectRow,
-    onResetPage,
-    onChangePage,
-    onSelectAllRows,
-    onChangeRowsPerPage,
   };
+
+  const fetchBotReply = async (question: string) => {
+    try {
+      const response = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return { answer: data.answer };
+    } catch (error) {
+      console.error('Error fetching bot reply:', error);
+      return {
+        answer: "I'm sorry, I couldn't process your request at the moment.",
+        status: 'error',
+      };
+    }
+  };
+
+  return (
+    <Box>
+      <ChatContainer>
+        {userMessages.map((msg, index) => (
+          <React.Fragment key={index}>
+            <MessageBox align="right">
+              <Typography>{msg}</Typography>
+            </MessageBox>
+            <MessageBox align="left">
+              <Typography>{botReplies[index]}</Typography>
+            </MessageBox>
+          </React.Fragment>
+        ))}
+
+        {loading && (
+          <MessageBox align="left">
+            <CircularProgress size={20} />
+          </MessageBox>
+        )}
+      </ChatContainer>
+
+      <ChatInputContainer>
+        <TextField
+          fullWidth
+          variant="outlined"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Type your message..."
+        />
+        <Button variant="contained" color="primary" onClick={handleSend} disabled={loading}>
+          Send
+        </Button>
+      </ChatInputContainer>
+    </Box>
+  );
 }

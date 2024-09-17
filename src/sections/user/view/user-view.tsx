@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, TextField, Button, Typography, Paper } from '@mui/material';
 import './colors.css';
 import './chat-styles.css';
@@ -13,17 +13,28 @@ export function ChatBot() {
   useEffect(() => {
     if (loading) {
       const interval = setInterval(() => {
-        setThinkingDots((prev) => (prev.length < 10 ? prev.toString() + ' .' : '.'));
+        setThinkingDots((prev) => (prev.length < 10 ? `${prev} .` : '.'));
       }, 300);
       return () => clearInterval(interval);
     }
+    return undefined;
   }, [loading]);
 
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [userMessages, botReplies]);
   const handleSend = async () => {
     if (inputValue.trim() === '') return;
 
     setUserMessages([...userMessages, inputValue]);
-    setBotReplies([...botReplies, '']); // Set an empty string initially
+    setBotReplies([...botReplies, '']);
     setInputValue('');
     setLoading(true);
 
@@ -83,8 +94,8 @@ export function ChatBot() {
   };
 
   return (
-    <Box>
-      <Box className="chat-container">
+    <Box className="chat-wrapper">
+      <Box className="chat-container" ref={chatContainerRef}>
         {userMessages.map((msg, index) => (
           <React.Fragment key={index}>
             <Paper className="message-box right">

@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 
 import { CONFIG } from 'src/config-global';
 
-import { ChatBot } from 'src/sections/user/view';
+import { ChatBot } from 'src/sections/chat/chat-view';
 
 // ----------------------------------------------------------------------
 

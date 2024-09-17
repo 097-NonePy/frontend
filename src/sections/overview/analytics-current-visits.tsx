@@ -31,10 +31,10 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
   const chartSeries = chart.series.map((item) => item.value);
 
   const chartColors = chart.colors ?? [
-    theme.palette.primary.main,
-    theme.palette.warning.main,
-    theme.palette.secondary.dark,
-    theme.palette.error.main,
+    '#941F5C',
+    '#C1C22E',
+    '#9D1A22',
+    '#13991C',
   ];
 
   const chartOptions = useChart({

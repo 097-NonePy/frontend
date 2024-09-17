@@ -24,6 +24,20 @@ export function OverviewAnalyticsView() {
       </Typography>
 
       <Grid container spacing={3}>
+      <Grid xs={12} md={6} lg={4}>
+          <AnalyticsCurrentVisits
+            title="Predictions based on the latest polls"
+            chart={{
+              series: [
+                { label: 'Anura Kumara', value: 38.16 },
+                { label: 'Sajith Premadasa', value: 30.51 },
+                { label: 'Namal Rajapakse', value: 3.55 },
+                { label: 'Ranil Wikramasinge', value: 27.71 },
+              ],
+            }}
+          />
+        </Grid>
+{/*         
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="Weekly sales"
@@ -75,20 +89,6 @@ export function OverviewAnalyticsView() {
             chart={{
               categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
               series: [56, 30, 23, 54, 47, 40, 62, 73],
-            }}
-          />
-        </Grid>
-
-        <Grid xs={12} md={6} lg={4}>
-          <AnalyticsCurrentVisits
-            title="Current visits"
-            chart={{
-              series: [
-                { label: 'America', value: 3500 },
-                { label: 'Asia', value: 2500 },
-                { label: 'Europe', value: 1500 },
-                { label: 'Africa', value: 500 },
-              ],
             }}
           />
         </Grid>
@@ -157,7 +157,7 @@ export function OverviewAnalyticsView() {
 
         <Grid xs={12} md={6} lg={8}>
           <AnalyticsTasks title="Tasks" list={_tasks} />
-        </Grid>
+        </Grid> */}
       </Grid>
     </DashboardContent>
   );

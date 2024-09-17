@@ -1,45 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Box, TextField, Button, Typography, Paper, CircularProgress } from '@mui/material';
-import { styled } from '@mui/system';
-
-interface MessageBoxProps {
-  align: 'left' | 'right';
-}
-
-const ChatContainer = styled(Box)({
-  display: 'flex',
-  flexDirection: 'column',
-  height: '80vh',
-  overflowY: 'auto',
-  padding: '16px',
-  border: '1px solid #ccc',
-  borderRadius: '8px',
-});
-
-const MessageBox = styled(Paper)<MessageBoxProps>(({ theme, align }) => ({
-  padding: '8px 16px',
-  margin: '8px 0',
-  maxWidth: '60%',
-  alignSelf: align === 'right' ? 'flex-end' : 'flex-start',
-  backgroundColor: align === 'right' ? theme.palette.primary.light : theme.palette.grey[200],
-}));
-
-const ChatInputContainer = styled(Box)({
-  display: 'flex',
-  marginTop: '16px',
-});
+import { Box, TextField, Button, Typography, Paper } from '@mui/material';
+import './colors.css';
+import './chat-styles.css';
 
 export function ChatBot() {
   const [userMessages, setUserMessages] = useState<string[]>([]);
   const [botReplies, setBotReplies] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
+  const [thinkingDots, setThinkingDots] = useState('');
+
+  useEffect(() => {
+    if (loading) {
+      const interval = setInterval(() => {
+        setThinkingDots((prev) => (prev.length < 10 ? prev.toString() + ' .' : '.'));
+      }, 300);
+      return () => clearInterval(interval);
+    }
+  }, [loading]);
 
   const handleSend = async () => {
     if (inputValue.trim() === '') return;
 
     setUserMessages([...userMessages, inputValue]);
-    setBotReplies([...botReplies, '......']);
+    setBotReplies([...botReplies, '']); // Set an empty string initially
     setInputValue('');
     setLoading(true);
 
@@ -91,39 +75,50 @@ export function ChatBot() {
     }
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      handleSend();
+    }
+  };
+
   return (
     <Box>
-      <ChatContainer>
+      <Box className="chat-container">
         {userMessages.map((msg, index) => (
           <React.Fragment key={index}>
-            <MessageBox align="right">
+            <Paper className="message-box right">
               <Typography>{msg}</Typography>
-            </MessageBox>
-            <MessageBox align="left">
-              <Typography>{botReplies[index]}</Typography>
-            </MessageBox>
+            </Paper>
+            {index < botReplies.length - 1 || !loading ? (
+              <Paper className="message-box left">
+                <Typography>{botReplies[index]}</Typography>
+              </Paper>
+            ) : null}
           </React.Fragment>
         ))}
 
         {loading && (
-          <MessageBox align="left">
-            <CircularProgress size={20} />
-          </MessageBox>
+          <Paper className="message-box left">
+            <Typography>{thinkingDots}</Typography>
+          </Paper>
         )}
-      </ChatContainer>
+      </Box>
 
-      <ChatInputContainer>
+      <Box className="chat-input-container">
         <TextField
+          className="chat-input"
           fullWidth
           variant="outlined"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyPress}
           placeholder="Type your message..."
         />
-        <Button variant="contained" color="primary" onClick={handleSend} disabled={loading}>
+        <Button className="send-button" variant="contained" onClick={handleSend} disabled={loading}>
           Send
         </Button>
-      </ChatInputContainer>
+      </Box>
     </Box>
   );
 }

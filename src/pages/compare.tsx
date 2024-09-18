@@ -96,10 +96,13 @@ export default function Page() {
     ranil: false,
     contrast: false,
   });
-  const [focus, setFocus] = useState('');
+  const [focus, setFocus] = useState('overral-development');
   const [instructions, setInstructions] = useState('');
   const [loading, setLoading] = useState(false); // Add loading state
-  const [result, setResult] = useState('');
+  const [sajith, setSajith] = useState('');
+  const [ranil, setRanil] = useState('');
+  const [namal, setNamal] = useState('');
+  const [msc, setMsc] = useState('');
   const [error, setError] = useState('');
 
   const handleCheckboxChange = (name: CheckboxState) => { // Use the defined type
@@ -134,15 +137,24 @@ export default function Page() {
       console.log(data);
       if (data.error) {
         setError(data.error);
-        setResult('');
+        setSajith('');
+        setRanil('');
+        setNamal('');
+        setMsc('');
       } else {
-        setResult(data.answer);
+        setSajith(data.answer.sajith_text);
+        setRanil(data.answer.ranil_text);
+        setNamal(data.answer.namal_text);
+        setMsc(data.answer.misc_text);
         setError('');
       }
     } catch (e) {
       console.error('Error sending request:', e);
       setError('Error sending request');
-      setResult('');
+      setSajith('');
+      setRanil('');
+      setNamal('');
+      setMsc('');
     } finally {
       setLoading(false); // Reset loading state
     }
@@ -210,7 +222,15 @@ export default function Page() {
           >
             <MenuItem value="education">Education</MenuItem>
             <MenuItem value="healthcare">Healthcare</MenuItem>
-            <MenuItem value="misc">Misc.</MenuItem>
+            <MenuItem value="economy">Economy</MenuItem>
+            <MenuItem value="environment">Environment and Climate Change</MenuItem>
+            <MenuItem value="social-welfare">Social Welfare and Housing</MenuItem>
+            <MenuItem value="infrastructure">Infrastructure</MenuItem>
+            <MenuItem value="national-security">National Security and Defense</MenuItem>
+            <MenuItem value="immigration">Immigration</MenuItem>
+            <MenuItem value="law-justice">Law and Justice</MenuItem>
+            <MenuItem value="civil-rights">Civil Rights and Liberties</MenuItem>
+            <MenuItem value="overral-development">Overall Development</MenuItem>
           </Select>
           </Box>
 
@@ -254,11 +274,71 @@ export default function Page() {
         </Box>
 
         {
-          result && (
-            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#e0f7fa', padding: 2, borderRadius: 1 }}>
-              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+          sajith && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Avatar alt="Sajith Premadasa" src="assets/images/avatar/sajith.jpg" />
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold', marginLeft: 2}}>
+                  Sajith Premadasa
+                </Typography>
+              </div>
+              
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
                 <ReactMarkdown>
-                  {result}
+                  {sajith}
+                </ReactMarkdown>
+              </Typography>
+            </Box>
+          )
+        }
+
+        {
+          namal && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Avatar alt="Namal Rajapakse" src="assets/images/avatar/namal.jpg" />
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold', marginLeft: 2}}>
+                  Namal Rajapakse
+                </Typography>
+              </div>
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
+                <ReactMarkdown>
+                  {namal}
+                </ReactMarkdown>
+              </Typography>
+            </Box>
+          )
+        }
+
+        {
+          ranil && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Avatar alt="Ranil Wikramasinghe" src="assets/images/avatar/ranil.jpg" />
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold', marginLeft: 2}}>
+                  Ranil Wikramasinghe
+                </Typography>
+              </div>
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
+                <ReactMarkdown>
+                  {ranil}
+                </ReactMarkdown>
+              </Typography>
+            </Box>
+          )
+        }
+
+        {
+          msc && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold'}}>
+                  Conclusion
+                </Typography>
+              </div>
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
+                <ReactMarkdown>
+                  {msc}
                 </ReactMarkdown>
               </Typography>
             </Box>

@@ -4,12 +4,7 @@ import { Iconify } from 'src/components/iconify';
 import { SvgColor } from 'src/components/svg-color';
 import { useState } from 'react'; // Add this import
 import ReactMarkdown from 'react-markdown'
-
-
-import { CONFIG } from 'src/config-global';
 import { DashboardContent } from 'src/layouts/dashboard';
-
-import { BlogView } from 'src/sections/blog/view';
 
 const BpIcon = styled('span')(({ theme }) => ({
   borderRadius: 3,

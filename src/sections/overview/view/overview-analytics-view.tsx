@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { PredictionPieChart, AnalyticsByAge, AnalyticsByEthnicity } from '../analytics-pie-charts';
-import { AnalyticsWebsiteVisits } from '../analytics-bar-charts';
+import { AnalyticsBarChart } from '../analytics-bar-charts';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ export function OverviewAnalyticsView() {
           </Grid>
 
           <Grid xs={12} md={6} lg={8}>
-            <AnalyticsWebsiteVisits
+            <AnalyticsBarChart
               title="Voting Intention by Demographic Characteristics"
               chart={{
                 categories: ['18 - 29', '30 - 59', '60'],
@@ -77,7 +77,7 @@ export function OverviewAnalyticsView() {
           </Grid>
 
           <Grid xs={12} md={6} lg={8}>
-            <AnalyticsWebsiteVisits
+            <AnalyticsBarChart
               title="Voting Intention by Ethnicity"
               chart={{
                 categories: ['Sinhala', 'Sri Lankan Tamil', 'Indian Tamil', 'Muslim'],
@@ -110,33 +110,19 @@ export function OverviewAnalyticsView() {
           </Grid>
 
           <Grid xs={12} md={6} lg={8}>
-            <AnalyticsWebsiteVisits
+            <AnalyticsBarChart
               title="Voting Intention by Province"
               chart={{
                 categories: [''],
                 series: [
-                  { name: 'SLPP', data: [4, 2, 3, 1, 7, ] },
-                  { name: 'Sajith Premadasa', data: [25, 35, 18, 32, 26, ] },
-                  { name: 'Anura Kumara', data: [37, 41, 52, 30, 41, ] },
-                  { name: 'Ranil Wikramasinge', data: [34, 22, 27, 36, 26, 98] },
+                  { name: 'SLPP', data: [4, 2, 3, 1, 7, 4] },
+                  { name: 'Sajith Premadasa', data: [25, 35, 18, 32, 26, 28] },
+                  { name: 'Anura Kumara', data: [37, 41, 52, 30, 41, 55 ] },
+                  { name: 'Ranil Wikramasinge', data: [34, 22, 27, 36, 26, 33] },
                 ],
               }}
             />
           </Grid>
-        </Grid>
-
-        <Grid xs={12} md={6} lg={8}>
-          <AnalyticsWebsiteVisits
-            title="Website visits"
-            subheader="(+43%) than last year"
-            chart={{
-              categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-              series: [
-                { name: 'Team A', data: [43, 33, 22, 37, 67, 68, 37, 24, 55] },
-                { name: 'Team B', data: [51, 70, 47, 67, 40, 37, 24, 70, 24] },
-              ],
-            }}
-          />
         </Grid>
 
         {/* <Grid xs={12} md={6} lg={8}>

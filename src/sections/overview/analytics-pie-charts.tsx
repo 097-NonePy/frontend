@@ -25,16 +25,16 @@ type Props = CardProps & {
   };
 };
 
-export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Props) {
+export function PredictionPieChart({ title, subheader, chart, ...other }: Props) {
   const theme = useTheme();
 
   const chartSeries = chart.series.map((item) => item.value);
 
   const chartColors = chart.colors ?? [
-    '#FF5733', // A vibrant red-orange
-    '#33FF57', // A bright green
-    '#3357FF', // A bold blue
-    '#FFC300', // A bright yellow
+    '#941F5C',
+    '#C1C22E',
+    '#9D1A22',
+    '#13991C',
   ];
 
   const chartOptions = useChart({
@@ -76,17 +76,19 @@ export function AnalyticsCurrentVisits({ title, subheader, chart, ...other }: Pr
     </Card>
   );
 }
+// --yale-blue: #0d3b66ff;
+// --lemon-chiffon: #faf0caff;
+// --naples-yellow: #f4d35eff;
+// --sandy-brown: #ee964bff;
+// --tomato: #f95738ff;
 
+const colors = ['#0d3b66', '#faf0ca', '#f4d35e', '#ee964b', '#f95738'];
 export function AnalyticsByAge({ title, subheader, chart, ...other }: Props) {
   const theme = useTheme();
 
   const chartSeries = chart.series.map((item) => item.value);
 
-  const chartColors =  [
-    '#FF5733', // A vibrant red-orange
-    '#33FF57', // A bright green
-    '#3357FF', // A bold blue
-  ];
+  const chartColors =  ['#fe5f55','#4f6367', '#7a9e9f'];
 
   const chartOptions = useChart({
     chart: { sparkline: { enabled: true } },
@@ -133,12 +135,9 @@ export function AnalyticsByEthnicity({ title, subheader, chart, ...other }: Prop
 
   const chartSeries = chart.series.map((item) => item.value);
 
-  const chartColors = chart.colors ?? [
-    '#FF5733', // A vibrant red-orange
-    '#33FF57', // A bright green
-    '#3357FF', // A bold blue
-    '#FFC300', // A bright yellow
-  ];
+ const  chartColors =  ['#fe5f55','#4f6367', '#7a9e9f', '#0d3b66'];
+
+
 
   const chartOptions = useChart({
     chart: { sparkline: { enabled: true } },

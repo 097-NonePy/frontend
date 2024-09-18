@@ -81,12 +81,13 @@ interface RequestData {
   namal: boolean;
   sajith: boolean;
   ranil: boolean;
+  anura: boolean;
   compare_2019: boolean;
   field: string;
   instructions: string;
 }
 
-type CheckboxState = 'namal' | 'sajith' | 'ranil' | 'contrast'; // Define a type for checkbox names
+type CheckboxState = 'namal' | 'sajith' | 'ranil' | 'anura' | 'contrast'; // Define a type for checkbox names
 
 export default function Page() {
   // Define state for checkboxes and select
@@ -94,6 +95,7 @@ export default function Page() {
     namal: false,
     sajith: false,
     ranil: false,
+    anura: false,
     contrast: false,
   });
   const [focus, setFocus] = useState('overral-development');
@@ -102,6 +104,7 @@ export default function Page() {
   const [sajith, setSajith] = useState('');
   const [ranil, setRanil] = useState('');
   const [namal, setNamal] = useState('');
+  const [anura, setAnura] = useState('');
   const [msc, setMsc] = useState('');
   const [error, setError] = useState('');
 
@@ -119,6 +122,7 @@ export default function Page() {
       namal: checkboxStates.namal,
       sajith: checkboxStates.sajith,
       ranil: checkboxStates.ranil,
+      anura: checkboxStates.anura,
       compare_2019: checkboxStates.contrast,
       field: focus,
       instructions,
@@ -141,11 +145,13 @@ export default function Page() {
         setRanil('');
         setNamal('');
         setMsc('');
+        setAnura('');
       } else {
         setSajith(data.answer.sajith_text);
         setRanil(data.answer.ranil_text);
         setNamal(data.answer.namal_text);
         setMsc(data.answer.misc_text);
+        setAnura(data.answer.anura_text);
         setError('');
       }
     } catch (e) {
@@ -155,6 +161,7 @@ export default function Page() {
       setRanil('');
       setNamal('');
       setMsc('');
+      setAnura('');
     } finally {
       setLoading(false); // Reset loading state
     }
@@ -209,13 +216,23 @@ export default function Page() {
               onChange={() => handleCheckboxChange('ranil')} 
             />
           </Box>
-
           <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f5f5f5', padding: 1, borderRadius: 1 }}>
-          <Typography variant="body1" sx={{ marginRight: 1 }}>
+            <Avatar alt="Anura Dissanayake" src="assets/images/avatar/anura.webp" />
+            <Typography variant="body1" sx={{ marginLeft: 1 }}>
+              Anura Dissanayake
+            </Typography>
+            <BpCheckbox 
+              sx={{ marginLeft: 'auto' }} 
+              checked={checkboxStates.anura} 
+              onChange={() => handleCheckboxChange('anura')} 
+            />
+          </Box>
+          <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f5f5f5', padding: 1, borderRadius: 1 }}>
+            <Typography variant="body1" sx={{ marginRight: 1 }}>
             Focus on
           </Typography>
           <Select
-            defaultValue=""
+            defaultValue="overral-development"
             onChange={handleSelectChange}
             sx={{ marginLeft: 'auto', minWidth: 120 }}
             inputProps={{ 'aria-label': 'Compare' }}
@@ -322,6 +339,24 @@ export default function Page() {
               <Typography variant="body1" sx={{ textAlign: 'left' }}>
                 <ReactMarkdown>
                   {ranil}
+                </ReactMarkdown>
+              </Typography>
+            </Box>
+          )
+        }
+
+        {
+          anura && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Avatar alt="Anura Dissanayake" src="assets/images/avatar/anura.webp" />
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold', marginLeft: 2}}>
+                  Anura Dissanayake
+                </Typography>
+              </div>
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
+                <ReactMarkdown>
+                  {anura}
                 </ReactMarkdown>
               </Typography>
             </Box>

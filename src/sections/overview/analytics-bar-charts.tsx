@@ -23,12 +23,14 @@ type Props = CardProps & {
   };
 };
 
-export function AnalyticsWebsiteVisits({ title, subheader, chart, ...other }: Props) {
+export function AnalyticsBarChart({ title, subheader, chart, ...other }: Props) {
   const theme = useTheme();
 
   const chartColors = chart.colors ?? [
-    theme.palette.primary.dark,
-    hexAlpha(theme.palette.primary.light, 0.64),
+    '#941F5C',
+    '#C1C22E',
+    '#9D1A22',
+    '#13991C',
   ];
 
   const chartOptions = useChart({

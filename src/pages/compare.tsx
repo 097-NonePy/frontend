@@ -4,12 +4,7 @@ import { Iconify } from 'src/components/iconify';
 import { SvgColor } from 'src/components/svg-color';
 import { useState } from 'react'; // Add this import
 import ReactMarkdown from 'react-markdown'
-
-
-import { CONFIG } from 'src/config-global';
 import { DashboardContent } from 'src/layouts/dashboard';
-
-import { BlogView } from 'src/sections/blog/view';
 
 const BpIcon = styled('span')(({ theme }) => ({
   borderRadius: 3,
@@ -81,12 +76,13 @@ interface RequestData {
   namal: boolean;
   sajith: boolean;
   ranil: boolean;
+  anura: boolean;
   compare_2019: boolean;
   field: string;
   instructions: string;
 }
 
-type CheckboxState = 'namal' | 'sajith' | 'ranil' | 'contrast'; // Define a type for checkbox names
+type CheckboxState = 'namal' | 'sajith' | 'ranil' | 'anura' | 'contrast'; // Define a type for checkbox names
 
 export default function Page() {
   // Define state for checkboxes and select
@@ -94,12 +90,17 @@ export default function Page() {
     namal: false,
     sajith: false,
     ranil: false,
+    anura: false,
     contrast: false,
   });
-  const [focus, setFocus] = useState('');
+  const [focus, setFocus] = useState('overral-development');
   const [instructions, setInstructions] = useState('');
   const [loading, setLoading] = useState(false); // Add loading state
-  const [result, setResult] = useState('');
+  const [sajith, setSajith] = useState('');
+  const [ranil, setRanil] = useState('');
+  const [namal, setNamal] = useState('');
+  const [anura, setAnura] = useState('');
+  const [msc, setMsc] = useState('');
   const [error, setError] = useState('');
 
   const handleCheckboxChange = (name: CheckboxState) => { // Use the defined type
@@ -116,6 +117,7 @@ export default function Page() {
       namal: checkboxStates.namal,
       sajith: checkboxStates.sajith,
       ranil: checkboxStates.ranil,
+      anura: checkboxStates.anura,
       compare_2019: checkboxStates.contrast,
       field: focus,
       instructions,
@@ -134,15 +136,27 @@ export default function Page() {
       console.log(data);
       if (data.error) {
         setError(data.error);
-        setResult('');
+        setSajith('');
+        setRanil('');
+        setNamal('');
+        setMsc('');
+        setAnura('');
       } else {
-        setResult(data.answer);
+        setSajith(data.answer.sajith_text);
+        setRanil(data.answer.ranil_text);
+        setNamal(data.answer.namal_text);
+        setMsc(data.answer.misc_text);
+        setAnura(data.answer.anura_text);
         setError('');
       }
     } catch (e) {
       console.error('Error sending request:', e);
       setError('Error sending request');
-      setResult('');
+      setSajith('');
+      setRanil('');
+      setNamal('');
+      setMsc('');
+      setAnura('');
     } finally {
       setLoading(false); // Reset loading state
     }
@@ -197,20 +211,38 @@ export default function Page() {
               onChange={() => handleCheckboxChange('ranil')} 
             />
           </Box>
-
           <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f5f5f5', padding: 1, borderRadius: 1 }}>
-          <Typography variant="body1" sx={{ marginRight: 1 }}>
+            <Avatar alt="Anura Dissanayake" src="assets/images/avatar/anura.webp" />
+            <Typography variant="body1" sx={{ marginLeft: 1 }}>
+              Anura Dissanayake
+            </Typography>
+            <BpCheckbox 
+              sx={{ marginLeft: 'auto' }} 
+              checked={checkboxStates.anura} 
+              onChange={() => handleCheckboxChange('anura')} 
+            />
+          </Box>
+          <Box display="flex" alignItems="center" sx={{ backgroundColor: '#f5f5f5', padding: 1, borderRadius: 1 }}>
+            <Typography variant="body1" sx={{ marginRight: 1 }}>
             Focus on
           </Typography>
           <Select
-            defaultValue=""
+            defaultValue="overral-development"
             onChange={handleSelectChange}
             sx={{ marginLeft: 'auto', minWidth: 120 }}
             inputProps={{ 'aria-label': 'Compare' }}
           >
             <MenuItem value="education">Education</MenuItem>
             <MenuItem value="healthcare">Healthcare</MenuItem>
-            <MenuItem value="misc">Misc.</MenuItem>
+            <MenuItem value="economy">Economy</MenuItem>
+            <MenuItem value="environment">Environment and Climate Change</MenuItem>
+            <MenuItem value="social-welfare">Social Welfare and Housing</MenuItem>
+            <MenuItem value="infrastructure">Infrastructure</MenuItem>
+            <MenuItem value="national-security">National Security and Defense</MenuItem>
+            <MenuItem value="immigration">Immigration</MenuItem>
+            <MenuItem value="law-justice">Law and Justice</MenuItem>
+            <MenuItem value="civil-rights">Civil Rights and Liberties</MenuItem>
+            <MenuItem value="overral-development">Overall Development</MenuItem>
           </Select>
           </Box>
 
@@ -254,11 +286,89 @@ export default function Page() {
         </Box>
 
         {
-          result && (
-            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#e0f7fa', padding: 2, borderRadius: 1 }}>
-              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+          sajith && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Avatar alt="Sajith Premadasa" src="assets/images/avatar/sajith.jpg" />
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold', marginLeft: 2}}>
+                  Sajith Premadasa
+                </Typography>
+              </div>
+              
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
                 <ReactMarkdown>
-                  {result}
+                  {sajith}
+                </ReactMarkdown>
+              </Typography>
+            </Box>
+          )
+        }
+
+        {
+          namal && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Avatar alt="Namal Rajapakse" src="assets/images/avatar/namal.jpg" />
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold', marginLeft: 2}}>
+                  Namal Rajapakse
+                </Typography>
+              </div>
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
+                <ReactMarkdown>
+                  {namal}
+                </ReactMarkdown>
+              </Typography>
+            </Box>
+          )
+        }
+
+        {
+          ranil && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Avatar alt="Ranil Wikramasinghe" src="assets/images/avatar/ranil.jpg" />
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold', marginLeft: 2}}>
+                  Ranil Wikramasinghe
+                </Typography>
+              </div>
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
+                <ReactMarkdown>
+                  {ranil}
+                </ReactMarkdown>
+              </Typography>
+            </Box>
+          )
+        }
+
+        {
+          anura && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Avatar alt="Anura Dissanayake" src="assets/images/avatar/anura.webp" />
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold', marginLeft: 2}}>
+                  Anura Dissanayake
+                </Typography>
+              </div>
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
+                <ReactMarkdown>
+                  {anura}
+                </ReactMarkdown>
+              </Typography>
+            </Box>
+          )
+        }
+
+        {
+          msc && (
+            <Box display="flex" flexDirection="column" alignItems="center" marginTop={2} sx={{ backgroundColor: '#fffff', padding: 2, borderRadius: 1, boxShadow: 3 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', gap: 5 }}>
+                <Typography variant="body1" sx={{ textAlign: 'left', marginRight: 'auto', fontWeight: 'bold'}}>
+                  Conclusion
+                </Typography>
+              </div>
+              <Typography variant="body1" sx={{ textAlign: 'left' }}>
+                <ReactMarkdown>
+                  {msc}
                 </ReactMarkdown>
               </Typography>
             </Box>

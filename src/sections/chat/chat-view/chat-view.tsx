@@ -126,7 +126,7 @@ export function ChatBot() {
     }
 
     const data = await response.json();
-    return { answer: data.generation };
+    return { answer: data.answer };
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {

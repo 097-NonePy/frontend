@@ -1,13 +1,33 @@
 import React, { MouseEvent, useState } from 'react';
-import { Box, Typography, IconButton } from '@mui/material';
+import { Box, Typography, IconButton, Menu, MenuItem, Button } from '@mui/material';
 import { Icon } from '@iconify/react';
 
 interface ChatHeaderProps {
   onMenuClick: (event: React.MouseEvent<HTMLElement>) => void;
-  setLanguage: (language: string) => void; // Assuming setLanguage is a function that takes a string and returns void
+  setLanguage: (language: string) => void;
+  language: string;
 }
 
-export const ChatHeader: React.FC<ChatHeaderProps> = ({ onMenuClick, setLanguage }) => {
+const languageMapping: { [key: string]: string } = {
+  English: 'en',
+  Sinhala: 'si',
+  Tamil: 'ta',
+  Singlish: 'seng',
+  'gen z slang': 'slang',
+};
+
+const reverseMapping = (obj: { [key: string]: string }): { [key: string]: string } => {
+  const reversed: { [key: string]: string } = {};
+  Object.entries(obj).forEach(([key, value]) => {
+    reversed[value] = key;
+  });
+  return reversed;
+};
+
+const reversedLanguageMapping = reverseMapping(languageMapping);
+const getKeyByValue = (value: string): string | undefined => reversedLanguageMapping[value];
+
+export const ChatHeader: React.FC<ChatHeaderProps> = ({ onMenuClick, setLanguage, language }) => {
   // State to manage the anchor element for the dropdown menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -20,7 +40,8 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onMenuClick, setLanguage
   };
 
   const handleLanguageChange = (lang: string) => {
-    setLanguage(lang);
+    const languageCode = languageMapping[lang];
+    setLanguage(languageCode);
     handleClose();
   };
 
@@ -37,6 +58,22 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onMenuClick, setLanguage
         Ask any question about candidates, their promises, and election details. Our AI-powered
         Election Bot has you covered!
       </Typography>
+      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+        {getKeyByValue(language)}
+      </Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        {['English', 'Sinhala', 'Tamil', 'Singlish', 'gen z slang'].map((lang) => (
+          <MenuItem key={lang} onClick={() => handleLanguageChange(lang)}>
+            {lang}
+          </MenuItem>
+        ))}
+      </Menu>
       <IconButton onClick={onMenuClick}>
         <Icon icon="mdi:menu" width="24" height="24" />
       </IconButton>

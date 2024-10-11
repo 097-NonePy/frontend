@@ -75,9 +75,9 @@ export function ChatBot() {
 
     try {
       const response = await fetchBotReply(inputValue);
-      console.log('response', response);
+      // console.log('response', response);
       const botReply: Message = { text: response.answer, isUser: false };
-      console.log('botReply', botReply);
+      // console.log('botReply', botReply);
       setChats((prevChats) => {
         const updatedChats = { ...prevChats };
         if (updatedChats[currentChatId].messages.slice(-1)[0]?.text !== botReply.text) {
@@ -112,11 +112,13 @@ export function ChatBot() {
     }
   };
 
+  const [language, setLanguage] = useState('en');
+
   const fetchBotReply = async (question: string) => {
     const response = await fetch('http://localhost:8000/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ question, thread_id: currentChatId }),
+      headers: { 'Content-Type': 'application/json', language },
+      body: JSON.stringify({ question, thread_id: currentChatId, language }),
     });
 
     if (!response.ok) {
@@ -173,11 +175,10 @@ export function ChatBot() {
   const handlePastChatsClick = () => {
     setPastChatsOpen((prev) => !prev);
   };
-  const [language, setLanguage] = useState('en');
 
   return (
     <Box className="chat-wrapper">
-      <ChatHeader onMenuClick={handleMenuClick} setLanguage={setLanguage} />
+      <ChatHeader onMenuClick={handleMenuClick} setLanguage={setLanguage} language={language} />
       <ChatMessages
         messages={chats[currentChatId].messages}
         loading={loading}

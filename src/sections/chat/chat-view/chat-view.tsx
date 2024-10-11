@@ -173,10 +173,11 @@ export function ChatBot() {
   const handlePastChatsClick = () => {
     setPastChatsOpen((prev) => !prev);
   };
+  const [language, setLanguage] = useState('en');
 
   return (
     <Box className="chat-wrapper">
-      <ChatHeader onMenuClick={handleMenuClick} />
+      <ChatHeader onMenuClick={handleMenuClick} setLanguage={setLanguage} />
       <ChatMessages
         messages={chats[currentChatId].messages}
         loading={loading}

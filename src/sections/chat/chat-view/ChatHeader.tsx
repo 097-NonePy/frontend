@@ -49,16 +49,21 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ onMenuClick, setLanguage
     <Box
       className="chat-header"
       display="flex"
-      justifyContent="space-between"
+      justifyContent="right"
       alignItems="center"
-      padding="10px"
+      padding="5px 30px"
       height="50px"
     >
-      <Typography variant="h6" sx={{ fontSize: '16px', padding: '0px 25px', textAlign: 'center' }}>
+      {/* <Typography variant="h6" sx={{ fontSize: '16px', padding: '0px 25px', textAlign: 'center' }}>
         Ask any question about candidates, their promises, and election details. Our AI-powered
         Election Bot has you covered!
-      </Typography>
-      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+      </Typography> */}
+      <Button
+        aria-controls="simple-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+        sx={{ width: '150px' }}
+      >
         {getKeyByValue(language)}
       </Button>
       <Menu

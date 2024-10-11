@@ -15,6 +15,14 @@ export const ChatMessages = React.forwardRef<
   }
 >(({ messages, loading, thinkingDots }, ref) => (
   <Box className="chat-container" ref={ref}>
+    {messages.length === 0 && !loading && (
+      <Paper className="message-box left">
+        <Typography>
+          What would you like to know about candidates, their promises, or election details? Our
+          AI-powered Election Bot is here to help!
+        </Typography>
+      </Paper>
+    )}
     {messages.map((msg, index) => (
       <Paper key={index} className={`message-box ${msg.isUser ? 'right' : 'left'}`}>
         <Typography>{msg.text}</Typography>

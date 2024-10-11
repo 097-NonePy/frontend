@@ -11,7 +11,7 @@
   padding: 16px;
   border: 1px solid var(--chat-container-border);
   border-radius: 8px;
-  margin: 1rem 2rem;
+  margin: 0.3rem 2rem;
   background-color: var(--chat-bg);
   scroll-behavior: smooth;
   transition: all 0.3s ease-out;

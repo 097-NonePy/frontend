@@ -24,10 +24,10 @@ export function OverviewAnalyticsView() {
             subheader="Based on the latest polls"
             chart={{
               series: [
-                { label: 'Anura Kumara', value: 38.16 },
-                { label: 'Sajith Premadasa', value: 30.51 },
-                { label: 'Namal Rajapakse', value: 3.55 },
-                { label: 'Ranil Wikramasinge', value: 27.71 },
+                { label: 'Anura Kumara', value: 40.23 },
+                { label: 'Sajith Premadasa', value: 28.53 },
+                { label: 'Namal Rajapakse', value: 3.17 },
+                { label: 'Ranil Wikramasinge', value: 24.74 },
               ],
             }}
           />

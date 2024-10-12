@@ -75,20 +75,34 @@ export function ChatBot() {
 
     try {
       const response = await fetchBotReply(inputValue);
-      // console.log('response', response);
-      const botReply: Message = { text: response.answer, isUser: false };
-      // console.log('botReply', botReply);
-      setChats((prevChats) => {
-        const updatedChats = { ...prevChats };
-        if (updatedChats[currentChatId].messages.slice(-1)[0]?.text !== botReply.text) {
-          console.log('inside if');
-          updatedChats[currentChatId].messages = [
-            ...updatedChats[currentChatId].messages,
-            botReply,
-          ];
-        }
-        return updatedChats;
-      });
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let botReplyText = '';
+
+      // Read the stream
+      while (true) {
+        const { done, value } = await reader!.read();
+        if (done) break;
+        botReplyText += decoder.decode(value, { stream: true });
+
+        // Update the chat with the new part of the bot reply
+        setChats((prevChats) => {
+          const updatedChats = { ...prevChats };
+          const lastMessageIndex = updatedChats[currentChatId].messages.length - 1;
+
+          // Check if the last message is from the bot and update it
+          if (lastMessageIndex >= 0 && !updatedChats[currentChatId].messages[lastMessageIndex].isUser) {
+            updatedChats[currentChatId].messages[lastMessageIndex].text += botReplyText; // Append text
+          } else {
+            const botReply: Message = { text: botReplyText, isUser: false };
+            updatedChats[currentChatId].messages = [
+              ...updatedChats[currentChatId].messages,
+              botReply,
+            ];
+          }
+          return updatedChats;
+        });
+      }
     } catch (error) {
       console.error('Error in handleSend:', error);
       const errorMessage: Message = {
@@ -98,7 +112,6 @@ export function ChatBot() {
 
       setChats((prevChats) => {
         const updatedChats = { ...prevChats };
-        // Check if the last message is already an error message to avoid duplication
         if (updatedChats[currentChatId].messages.slice(-1)[0]?.text !== errorMessage.text) {
           updatedChats[currentChatId].messages = [
             ...updatedChats[currentChatId].messages,
@@ -117,7 +130,7 @@ export function ChatBot() {
   const fetchBotReply = async (question: string) => {
     const response = await fetch('http://localhost:8000/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', language },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question, thread_id: currentChatId, language }),
     });
 
@@ -125,8 +138,7 @@ export function ChatBot() {
       throw new Error('Network response was not ok');
     }
 
-    const data = await response.json();
-    return { answer: data.answer };
+    return response;
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {

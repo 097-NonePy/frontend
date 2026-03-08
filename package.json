@@ -18,7 +18,6 @@
     "re:build": "yarn rm:all && yarn install && yarn build",
     "re:build-npm": "npm run rm:all && npm install && npm run build",
     "dev:host": "vite --host",
-    "preinstall": "node preinstall.js"
   },
   "engines": {
     "node": "20.x"
